@@ -1,0 +1,13 @@
+he transaction type can be determined based on the address of the to field and from field of the transaction.
+
+Transfer Transactions: If the to field of the transaction is not the zero address (0x0000000000000000000000000000000000000000), it is a transfer transaction.
+
+Contract Creation: If the to field is the zero address (0x0000000000000000000000000000000000000000) and the input field of the transaction is not empty, it means that the transaction is creating a new contract.
+
+Contract Call: If the to field is not the zero address (0x0000000000000000000000000000000000000000) and the input field of the transaction is not empty, it means that the transaction is calling a method on a contract.
+
+Token Transfer: If the to field is the contract address of a token, and the input field of the transaction is a function call to the transfer method of that contract, it means that the transaction is a token transfer.
+
+Minting: There is no standard way to detect minting transactions. However, if the to field is the contract address of a token, and the input field of the transaction is a function call to a method that can mint tokens, it might be a minting transaction. But it's important to check the contract code and ABI to be sure.
+
+Note that this is not an exhaustive list and there may be other types of transactions that can occur on a blockchain.
