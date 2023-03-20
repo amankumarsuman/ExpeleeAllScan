@@ -1,7 +1,6 @@
 import axios from "axios";
-// import { formatUnits } from "ethers/lib/utils";
 
-async function getWalletData(address, network) {
+async function getWalletDataWithInandOut(address, network) {
   let apiUrl, apiKey;
   switch (network) {
     case "ethereum":
@@ -39,13 +38,40 @@ async function getWalletData(address, network) {
   const firstTx =
     txListResponse.data.result[txListResponse.data.result.length - 1];
 
-  // const type = tx.to.toLowerCase() === address.toLowerCase() ? "IN" : "OUT";
+  const incomingTxList = [];
+  const outgoingTxList = [];
+
+  txListResponse.data.result.forEach((tx) => {
+    if (tx.from.toLowerCase() === address.toLowerCase()) {
+      outgoingTxList.push({
+        hash: tx.hash,
+        blockNumber: tx.blockNumber,
+        to: tx.to,
+        value: tx.value / 10 ** 18,
+        timestamp: formatDate(tx.timeStamp),
+        gasUsed: tx.gasUsed,
+        gasPrice: tx.gasPrice,
+        fee: tx.gasUsed * parseInt(tx.gasPrice),
+      });
+    } else if (tx.to.toLowerCase() === address.toLowerCase()) {
+      incomingTxList.push({
+        hash: tx.hash,
+        blockNumber: tx.blockNumber,
+        from: tx.from,
+        value: tx.value / 10 ** 18,
+        timestamp: formatDate(tx.timeStamp),
+        gasUsed: tx.gasUsed,
+        gasPrice: tx.gasPrice,
+        fee: tx.gasUsed * parseInt(tx.gasPrice),
+      });
+    }
+  });
 
   return {
     balance: balanceResponse.data.result / 10 ** 18,
     balanceInEther,
-    allTransaction: txListResponse?.data?.result,
-
+    incomingTxList,
+    outgoingTxList,
     lastTx: {
       hash: lastTx.hash,
       blockNumber: lastTx.blockNumber,
@@ -88,4 +114,4 @@ function formatDate(timestamp) {
 
   return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds (${month} ${day}, ${year} ${time})`;
 }
-export { getWalletData };
+export { getWalletDataWithInandOut };
