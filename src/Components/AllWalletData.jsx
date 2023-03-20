@@ -21,8 +21,12 @@ function AllWalletDetails() {
 
   const handleGetDetails = async () => {
     try {
+      // if (address?.length > 42) {
+      //   alert("Please enter correct wallet address");
+      // } else {
       const data = await getWalletData(address, network);
       setWalletData(data);
+      // }
     } catch (error) {
       console.error(error);
     }
