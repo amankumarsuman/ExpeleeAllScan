@@ -84,13 +84,11 @@ export default function TransactionTable({ data }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
+            {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                     <TableCell sx={{ color: "green" }}>
-                      {row.blockHash.slice(0, 20)}...
+                      {row?.blockHash?.slice(0, 20)}...
                     </TableCell>
                     <TableCell style={{ textAlign: "left" }}>
                       <div
@@ -106,18 +104,18 @@ export default function TransactionTable({ data }) {
                       </div>
                     </TableCell>
                     <TableCell sx={{ color: "green" }}>
-                      {row.blockNumber}
+                      {row?.blockNumber}
                     </TableCell>
-                    <TableCell>{formatDate(row.timeStamp)}</TableCell>
+                    <TableCell>{formatDate(row?.timeStamp)}</TableCell>
                     <TableCell sx={{ color: "green" }}>
-                      {row.from.slice(0, 20)}...
+                      {row?.from?.slice(0, 20)}...
                     </TableCell>
-                    <TableCell>{row.to.slice(0, 20)}...</TableCell>
+                    <TableCell>{row?.to?.slice(0, 20)}...</TableCell>
                     <TableCell>
-                      {(row.value / 10 ** 18).toFixed(5)}ETH
+                      {(row?.value / 10 ** 18)?.toFixed(5)}ETH
                     </TableCell>
                     <TableCell>
-                      {(row.gasPrice / 10 ** 18).toFixed(5)}ETH
+                      {(row?.gasPrice / 10 ** 18)?.toFixed(5)}ETH
                     </TableCell>
                   </TableRow>
                 );

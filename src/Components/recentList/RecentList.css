@@ -1,0 +1,19 @@
+.recent-list {
+    margin-top: 20px;
+}
+
+.recent-list h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.recent-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.recent-list li {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
