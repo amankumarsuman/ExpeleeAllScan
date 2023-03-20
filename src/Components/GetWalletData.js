@@ -1,0 +1,88 @@
+import axios from "axios";
+// import { formatUnits } from "ethers/lib/utils";
+
+async function getWalletData(address, network) {
+  let apiUrl, apiKey;
+  switch (network) {
+    case "ethereum":
+      apiUrl = "https://api.etherscan.io";
+      apiKey = "N98ZV19DWMZZ2HPA5J4NS7BVK1GRQ1QGSR";
+      break;
+    case "polygon":
+      apiUrl = "https://api.polygonscan.com";
+      apiKey = "M22ZP6XJAGIRZ42RFS4UVHM5UYB2C7JME6";
+      break;
+    case "arbitrum":
+      apiUrl = "https://api.arbiscan.io";
+      apiKey = "C2IEDITCYBW6YPG5CX32P8MGE8UKU48PVA";
+      break;
+    case "bsc":
+      apiUrl = "https://api.bscscan.com/api";
+      apiKey = "X9U59HU5Y5K5SHFN7WSNM6KIMJCYJMCAXP";
+      break;
+    default:
+      throw new Error(`Unsupported network: ${network}`);
+  }
+
+  const balanceResponse = await axios.get(
+    `${apiUrl}/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
+  );
+  const txListResponse = await axios.get(
+    `${apiUrl}/api?module=account&action=txlist&address=${address}&sort=asc&apikey=${apiKey}`
+  );
+
+  //   const balanceInEther = formatUnits(balanceResponse.data.result, 18);
+  const balanceInEther = balanceResponse.data.result
+    ? balanceResponse.data.result / 10 ** 18
+    : null;
+  const lastTx = txListResponse.data.result[0];
+  const firstTx =
+    txListResponse.data.result[txListResponse.data.result.length - 1];
+
+  return {
+    balance: balanceResponse.data.result / 10 ** 18,
+    balanceInEther,
+    allTransaction: txListResponse?.data?.result,
+    lastTx: {
+      hash: lastTx.hash,
+      blockNumber: lastTx.blockNumber,
+      from: lastTx.from,
+      to: lastTx.to,
+      value: lastTx.value,
+      timestamp: formatDate(lastTx.timeStamp),
+      gasUsed: lastTx.gasUsed,
+      gasPrice: lastTx.gasPrice,
+      fee: lastTx.gasUsed * parseInt(lastTx.gasPrice),
+    },
+    firstTx: {
+      hash: firstTx.hash,
+      blockNumber: firstTx.blockNumber,
+      from: firstTx.from,
+      to: firstTx.to,
+      value: firstTx.value,
+      timestamp: formatDate(firstTx.timeStamp),
+      gasUsed: firstTx.gasUsed,
+      gasPrice: firstTx.gasPrice,
+      fee: firstTx.gasUsed * parseInt(firstTx.gasPrice),
+    },
+  };
+}
+
+function formatDate(timestamp) {
+  const date = new Date(parseInt(timestamp) * 1000);
+  const currentDate = new Date();
+  const diff = Math.floor((currentDate - date) / 1000); // difference in seconds
+
+  const seconds = diff % 60;
+  const minutes = Math.floor(diff / 60) % 60;
+  const hours = Math.floor(diff / 3600) % 24;
+  const days = Math.floor(diff / 86400);
+
+  const month = date.toLocaleString("default", { month: "short" });
+  const day = date.getDate();
+  const year = date.getFullYear();
+  const time = date.toLocaleTimeString();
+
+  return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds (${month} ${day}, ${year} ${time})`;
+}
+export { getWalletData };

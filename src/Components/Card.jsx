@@ -41,7 +41,17 @@ export default function BasicCard(props) {
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {props?.balance ? (
-            `${props.balanceInEther} ETH`
+            `${props.balanceInEther} ${
+              props?.network === "ethereum"
+                ? "ETH"
+                : props?.network === "polygon"
+                ? "MATIC"
+                : props?.network === "bsc"
+                ? "BNB"
+                : props?.network === "arbitrum"
+                ? "ETH"
+                : "ETH"
+            }`
           ) : props?.lastTxn ? (
             <div
               style={{
@@ -64,7 +74,13 @@ export default function BasicCard(props) {
           {/* well meaning and kindly.
           <br />
           {'"a benevolent smile"'} */}
-          {props?.balance
+          {props?.balance && props?.network === "ethereum"
+            ? "ETH VALUE"
+            : props?.network === "polygon"
+            ? "MATIC VALUE"
+            : props?.network === "bsc"
+            ? "BNB VALUE"
+            : props?.network === "arbitrum"
             ? "ETH VALUE"
             : props?.lastTxn
             ? "LAST TXN SENT"
@@ -72,7 +88,17 @@ export default function BasicCard(props) {
         </Typography>
         <Typography variant="body2">
           {props?.balance ? (
-            "$42,646.80 (@ $1,788.53/ETH)"
+            `$42,646.80 (@ $1,788.53/${
+              props?.network === "ethereum"
+                ? "ETH"
+                : props?.network === "polygon"
+                ? "MATIC"
+                : props?.network === "bsc"
+                ? "BNB"
+                : props?.network === "arbitrum"
+                ? "ETH"
+                : "ETH"
+            })`
           ) : props.lastTxn ? (
             <>
               <span style={{ color: "green" }}>
