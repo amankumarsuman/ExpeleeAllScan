@@ -5,6 +5,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import FullWidthTabs from "./Tabs";
 
 const bull = (
   <Box
@@ -17,6 +18,8 @@ const bull = (
 
 export default function BasicCard(props) {
   return (
+
+    <>
     <Card sx={{ minWidth: 475, marginTop: "2em", marginBottom: "2em" }}>
       <CardContent sx={{ textAlign: "left" }}>
         <Typography
@@ -135,5 +138,9 @@ export default function BasicCard(props) {
         {/* <Button size="small">Learn More</Button> */}
       </CardActions>
     </Card>
+    {/* <FullWidthTabs data={props?.allTransaction} /> */}
+    
+    </>
+
   );
 }

@@ -7,6 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { getWalletData } from "./transactionDetails/Transaction-utils";
 
 const columns = [
   { id: "TxnHash", label: "Txn Hash" },
@@ -37,14 +38,46 @@ const columns = [
   { id: "TxnFee", label: "Txn Fee" },
 ];
 
-export default function TransactionTable({ data }) {
+export default function TransactionTable({ address,network }) {
+  console.log(address,network,"data")
+  const[isLoading,setIsLoading]=React.useState(true)
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+const [transactionData,setData]=React.useState(null)
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
+  const handleGetDetails = async () => {
+    try {
+   
+// 
+        const datas = await getWalletData(address, network);
+        // setWalletData(data);
+        console.log(datas,"transdata")
+        setData(datas?.allTransaction)
+        // setIsWalletAddr(true)
+        // setLoading(false);
+
+      
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+
+// React.useEffect(()=>{
+// if(transactionData?.length>0 && Array.isArray(transactionData)){
+//   setIsLoading(true)
+// }else{
+//   setIsLoading(false)
+// }
+// },[transactionData])
+
+React.useEffect(()=>{
+  handleGetDetails()
+},[])
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -66,6 +99,8 @@ export default function TransactionTable({ data }) {
 
     return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds (${month} ${day}, ${year} ${time})`;
   };
+
+  console.log(transactionData,"transsssssssssss")
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -84,7 +119,7 @@ export default function TransactionTable({ data }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row) => {
+            {transactionData && transactionData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                     <TableCell sx={{ color: "green" }}>
@@ -126,12 +161,13 @@ export default function TransactionTable({ data }) {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={data.length}
+        count={transactionData?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
+  //  <></>
   );
 }

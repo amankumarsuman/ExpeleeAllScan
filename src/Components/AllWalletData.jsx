@@ -7,6 +7,8 @@ import { formatTransactionDetails, getTransactionDetails } from "./transactionDe
 import TransactionDetailsUI from "./transactionDetails/TransactionDetailsUI";
 // assuming the getWalletData function is exported from a separate file
 import { css } from "@emotion/react";
+import PulseLoader from "react-spinners/PulseLoader";
+
 
 
 const override = css`
@@ -19,13 +21,21 @@ function AllWalletDetails() {
   const [transactionAddress, setTransactionAddress] = useState("");
   const [network, setNetwork] = useState("ethereum");
   const [walletData, setWalletData] = useState(null);
-  const [allTransaction, setAllTransaction] = useState([]);
+  const [allTransaction, setAllTransaction] = useState();
   const [moreAddress, setMoreAddress] = useState([]);
   const [isWalletAddr, setIsWalletAddr] = useState(true);
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
 
-console.log(details,isWalletAddr,address.length,"details")
+console.log(details,isWalletAddr,address.length,allTransaction,"details")
+function Loader(){
+
+  if(walletData?.allTransaction?.length>0){
+  setLoading(true)
+  }else{
+    setLoading(false)
+  }
+}
   const handleAddressChange = (event) => {
     setAddress(event.target.value);
     // if(address?.length>42){
@@ -45,24 +55,25 @@ console.log(details,isWalletAddr,address.length,"details")
   const handleGetDetails = async () => {
     try {
       if (address?.length > 42) {
-        setLoading(true);
+        // setLoading(true);
 
         // alert("Please enter correct wallet address");
         const TransactionResult = await getTransactionDetails(address, network);
         const formattedDetails = formatTransactionDetails(TransactionResult);
         setDetails(formattedDetails);
-      setLoading(false);
+      // setLoading(false);
 
         
       } 
       
-      if(address?.length <50) {
-      setLoading(true);
-
+      else if(address?.length <50) {
+      // setLoading(true);
+// 
         const data = await getWalletData(address, network);
         setWalletData(data);
+        setAllTransaction(data?.allTransaction)
         // setIsWalletAddr(true)
-        setLoading(false);
+        // setLoading(false);
 
       }
     } catch (error) {
@@ -73,15 +84,17 @@ console.log(details,isWalletAddr,address.length,"details")
 
   useEffect(()=>{
     
-if(address.length>42){
-  setIsWalletAddr(false)
-}
-if(address?.length<50){
-  setIsWalletAddr(true)
+// if(address.length>42){
+//   setIsWalletAddr(false)
+// }
+// else if(address?.length<50){
+//   setIsWalletAddr(true)
 
-}
+// }
 handleGetDetails()
+// Loader()
   },[address])
+  console.log(walletData,walletData?.allTransaction,loading,"loading")
   return (
     <div>
       <label>
@@ -128,7 +141,7 @@ handleGetDetails()
           </ul>
         </div>
       )} */}
-      {isWalletAddr ?
+      {isWalletAddr && walletData ?
 
         <>
 
@@ -189,9 +202,11 @@ handleGetDetails()
               <BasicCard moreAddress={moreAddress} />
             )}
           </div>
-          {walletData?.allTransaction && walletData?.allTransaction?.length > 0 ? (
-            <FullWidthTabs data={walletData?.allTransaction} />
-          ) : null}
+          {/* {loading ?  
+      <PulseLoader color={"#007bff"} loading={loading} css={override} />
+:
+} */}
+<FullWidthTabs network={network} address={address}   />
         </> :
 ! isWalletAddr?        
         // <div>
