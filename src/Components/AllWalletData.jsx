@@ -18,6 +18,7 @@ import MediaCard from "./emptyCard/EmptyCard";
 import "./mainBodystyle.css";
 import Body from "./body/Body";
 import GasAndEthPrice from "./body/GasTracker";
+import { useSelector } from "react-redux";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -36,6 +37,9 @@ function AllWalletDetails() {
   const [inProgress, setInProgress] = useState(false);
   const [internalTransaction,setInternalTransaction]=useState()
   const [blockData,setBlockData]=useState()
+
+  const ethereumPrice=useSelector((state)=>state?.allscan?.ethereumPrice)
+
   function Loader() {
     if (walletData?.allTransaction?.length > 0) {
       setLoading(true);

@@ -9,6 +9,9 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { getWalletData } from "./GetWalletData";
 import { getTransactionDetails } from "./transactionDetails/Transaction-utils";
+import { CSVLink } from "react-csv";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { Button, Tooltip } from "@mui/material";
 // import { getWalletData } from "./transactionDetails/Transaction-utils";
 
 const columns = [
@@ -97,6 +100,13 @@ export default function TransactionTable({ data }) {
     return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds (${month} ${day}, ${year} ${time})`;
   };
 
+
+  const csvReport = {
+    data: data,
+    // headers: columns,
+    filename: 'TransactionsDetailsByExpelee.csv'
+  };
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -165,6 +175,15 @@ export default function TransactionTable({ data }) {
         }
         </Table>
       </TableContainer>
+      <div style={{display:"flex",justifyContent:"space-between"}}>
+
+      <Tooltip title="Download in CSV" placement="right-end">
+                
+                <Button>
+                
+        <CSVLink {...csvReport}><FileDownloadIcon/> </CSVLink>
+                </Button>
+              </Tooltip>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
@@ -174,6 +193,7 @@ export default function TransactionTable({ data }) {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      </div>
     </Paper>
     //  <></>
   );
