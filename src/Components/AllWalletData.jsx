@@ -3,13 +3,14 @@ import BasicCard from "./Card";
 // import { formatUnits } from "ethers/lib/utils";
 import { getWalletData } from "./GetWalletData";
 import FullWidthTabs from "./Tabs";
-import { formatTransactionDetails, getTransactionDetails } from "./transactionDetails/Transaction-utils";
+import {
+  formatTransactionDetails,
+  getTransactionDetails,
+} from "./transactionDetails/Transaction-utils";
 import TransactionDetailsUI from "./transactionDetails/TransactionDetailsUI";
 // assuming the getWalletData function is exported from a separate file
 import { css } from "@emotion/react";
 import PulseLoader from "react-spinners/PulseLoader";
-
-
 
 const override = css`
   display: block;
@@ -18,24 +19,22 @@ const override = css`
 
 function AllWalletDetails() {
   const [address, setAddress] = useState("");
-  const [transactionAddress, setTransactionAddress] = useState("");
+  const [transactionAddress, setTransactionAddress] = useState(false);
   const [network, setNetwork] = useState("ethereum");
   const [walletData, setWalletData] = useState(null);
   const [allTransaction, setAllTransaction] = useState();
   const [moreAddress, setMoreAddress] = useState([]);
   const [isWalletAddr, setIsWalletAddr] = useState(true);
   const [details, setDetails] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-console.log(details,isWalletAddr,address.length,allTransaction,"details")
-function Loader(){
-
-  if(walletData?.allTransaction?.length>0){
-  setLoading(true)
-  }else{
-    setLoading(false)
+  function Loader() {
+    if (walletData?.allTransaction?.length > 0) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
   }
-}
   const handleAddressChange = (event) => {
     setAddress(event.target.value);
     // if(address?.length>42){
@@ -45,56 +44,74 @@ function Loader(){
     // }else{
     //   alert("Address is neither wallet address nor transaction hash")
     // }
-
   };
 
   const handleNetworkChange = (event) => {
     setNetwork(event.target.value);
   };
-
+  // const handleNetworkChange = async (event) => {
+  //   event.preventDefault();
+  //   const network = await getNetworkFromAddress(address);
+  //   setNetwork(network || "Unknown");
+  // };
   const handleGetDetails = async () => {
     try {
       if (address?.length > 42) {
-        // setLoading(true);
+        console.log("called1");
 
+        // setLoading(true);
+        setTransactionAddress(true);
+        setIsWalletAddr(false);
         // alert("Please enter correct wallet address");
         const TransactionResult = await getTransactionDetails(address, network);
         const formattedDetails = formatTransactionDetails(TransactionResult);
         setDetails(formattedDetails);
-      // setLoading(false);
+        setLoading(false);
 
-        
-      } 
-      
-      else if(address?.length <50) {
-      // setLoading(true);
-// 
+        // setLoading(false);
+      } else if (address?.length < 50) {
+        // setLoading(true);
+        //
+        setTransactionAddress(false);
+        setIsWalletAddr(true);
+        console.log("called2");
         const data = await getWalletData(address, network);
-        setWalletData(data);
-        setAllTransaction(data?.allTransaction)
+        console.log(
+          data?.allTransaction?.length,
+          data?.allTransaction,
+          data,
+          "transaction"
+        );
+        if (
+          data?.allTransaction?.length > 0 &&
+          data?.allTransaction !== "Error! Invalid address format"
+        ) {
+          setWalletData(data);
+          setAllTransaction(data?.allTransaction);
+          setLoading(false);
+        }
         // setIsWalletAddr(true)
         // setLoading(false);
-
       }
     } catch (error) {
       console.error(error);
     }
   };
-  console.log(walletData);
 
-  useEffect(()=>{
-    
-// if(address.length>42){
-//   setIsWalletAddr(false)
-// }
-// else if(address?.length<50){
-//   setIsWalletAddr(true)
+  useEffect(() => {
+    // if(address.length>42){
+    //   setIsWalletAddr(false)
+    // }
+    // else if(address?.length<50){
+    //   setIsWalletAddr(true)
 
-// }
-handleGetDetails()
-// Loader()
-  },[address])
-  console.log(walletData,walletData?.allTransaction,loading,"loading")
+    // }
+    handleGetDetails();
+    // handleNetworkChange();
+    // Loader()
+  }, [address]);
+
+  console.log(details, transactionAddress, isWalletAddr, "details");
   return (
     <div>
       <label>
@@ -114,37 +131,12 @@ handleGetDetails()
       <br />
       <button onClick={handleGetDetails}>Get details</button>
       <hr />
-      {/* {walletData && (
-        <div>
-          <p>Balance: {walletData.balanceInEther} ETH</p>
-          <p>Last transaction:</p>
-          <ul>
-            <li>Hash: {walletData.lastTx.hash}</li>
-            <li>From: {walletData.lastTx.from}</li>
-            <li>To: {walletData.lastTx.to}</li>
-            <li>Value: {walletData.lastTx.value / 10 ** 18} ETH</li>
-            <li>Timestamp: {walletData.lastTx.timestamp}</li>
-            <li>Gas used: {walletData.lastTx.gasUsed}</li>
-            <li>Gas price: {walletData.lastTx.gasPrice} Gwei</li>
-            <li>Fee: {walletData.lastTx.fee / 10 ** 18} ETH</li>
-          </ul>
-          <p>First transaction:</p>
-          <ul>
-            <li>Hash: {walletData.firstTx.hash}</li>
-            <li>From: {walletData.firstTx.from}</li>
-            <li>To: {walletData.firstTx.to}</li>
-            <li>Value: {walletData.firstTx.value / 10 ** 18} ETH</li>
-            <li>Timestamp: {walletData.firstTx.timestamp}</li>
-            <li>Gas used: {walletData.firstTx.gasUsed}</li>
-            <li>Gas price: {walletData.firstTx.gasPrice} Gwei</li>
-            <li>Fee: {walletData.firstTx.fee / 10 ** 18} ETH</li>
-          </ul>
-        </div>
-      )} */}
-      {isWalletAddr && walletData ?
 
+      {/* {walletData ? ( */}
+      {loading ? (
+        <PulseLoader />
+      ) : walletData && isWalletAddr && allTransaction.length > 0 ? (
         <>
-
           <div
             style={{
               width: "90%",
@@ -153,31 +145,14 @@ handleGetDetails()
               justifyContent: "space-between",
             }}
           >
-            {walletData &&  (
+            {walletData && (
               <BasicCard
                 balance={walletData?.balance}
                 balanceInEther={walletData?.balanceInEther}
                 network={network}
               />
-              // <div>
-              //   <p>
-              //     Balance: {balance} wei ({balanceInEther} ether)
-              //   </p>
-              // </div>
             )}
             {walletData && (
-              // <div>
-              //   <p>Last Transaction:</p>
-              //   <ul>
-              //     <li>Hash: {lastTx.hash}</li>
-              //     <li>Block Number: {lastTx.blockNumber}</li>
-              //     <li>
-              //       Value: {lastTx.value} wei ({lastTx.value / 10 ** 18} ether)
-              //     </li>
-              //     <li>Timestamp: {formatDate(lastTx.timeStamp)}</li>
-              //   </ul>
-              // </div>
-
               <BasicCard
                 lastTxn={walletData?.lastTx.hash}
                 lastTxnBlockNumber={walletData?.lastTx.blockNumber}
@@ -187,40 +162,22 @@ handleGetDetails()
                 firstTxnTime={walletData?.firstTx.timeStamp}
               />
             )}
-            {walletData && (
-              // <div>
-              //   <p>First Transaction:</p>
-              //   <ul>
-              //     <li>Hash: {firstTx.hash}</li>
-              //     <li>Block Number: {firstTx.blockNumber}</li>
-              //     <li>
-              //       Value: {firstTx.value} wei ({firstTx.value / 10 ** 18} ether)
-              //     </li>
-              //     <li>Timestamp: {formatDate(firstTx.timeStamp)}</li>
-              //   </ul>
-              // </div>
-              <BasicCard moreAddress={moreAddress} />
-            )}
+            {walletData && <BasicCard moreAddress={moreAddress} />}
           </div>
-          {/* {loading ?  
-      <PulseLoader color={"#007bff"} loading={loading} css={override} />
-:
-} */}
-<FullWidthTabs network={network} address={address}   />
-        </> :
-! isWalletAddr?        
-        // <div>
-        <>
-        
-        <TransactionDetailsUI data={details} />
+
+          {allTransaction && !loading && (
+            <FullWidthTabs data={allTransaction ? allTransaction : []} />
+          )}
         </>
-
-        // </div>
-        :<div>"We are working on Contract/Token Address part"</div>
-      }
-
-{/* <TransactionDetailsUI data={details} /> */}
-
+      ) : details && transactionAddress ? (
+        <div>
+          <>
+            <TransactionDetailsUI data={details} />
+          </>
+        </div>
+      ) : (
+        <div>"We are working on Contract/Token Address part"</div>
+      )}
     </div>
   );
 }

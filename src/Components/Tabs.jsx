@@ -42,7 +42,7 @@ function a11yProps(index) {
   };
 }
 
-export default function FullWidthTabs({ network,address }) {
+export default function FullWidthTabs({ data }) {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -53,7 +53,7 @@ export default function FullWidthTabs({ network,address }) {
   const handleChangeIndex = (index) => {
     setValue(index);
   };
-// console.log(data)
+  // console.log(data)
   return (
     <Box sx={{ bgcolor: "background.paper", width: "90%", margin: "auto" }}>
       <AppBar position="static">
@@ -79,7 +79,10 @@ export default function FullWidthTabs({ network,address }) {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <TransactionTable network={network} address={address} />
+          <TransactionTable
+            // network={network} address={address}
+            data={data}
+          />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <h4>Internal Transaction will come soon</h4>

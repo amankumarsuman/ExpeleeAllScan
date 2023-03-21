@@ -1,4 +1,5 @@
 import axios from "axios";
+// import { useDispatch } from "react-redux";
 // import { formatUnits } from "ethers/lib/utils";
 
 async function getWalletData(address, network) {
@@ -24,49 +25,54 @@ async function getWalletData(address, network) {
       throw new Error(`Unsupported network: ${network}`);
   }
 
-  const balanceResponse = await axios.get(
-    `${apiUrl}/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
-  );
   const txListResponse = await axios.get(
     `${apiUrl}/api?module=account&action=txlist&address=${address}&sort=asc&apikey=${apiKey}`
   );
+  console.log(txListResponse, "txListResponse");
+  let balanceResponse;
+  if (txListResponse?.result?.length > 0) {
+    balanceResponse = await axios.get(
+      `${apiUrl}/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
+    );
+    console.log(balanceResponse, "balanceResponse");
+  }
 
   //   const balanceInEther = formatUnits(balanceResponse.data.result, 18);
-  const balanceInEther = balanceResponse.data.result
-    ? balanceResponse.data.result / 10 ** 18
+  const balanceInEther = balanceResponse?.data?.result
+    ? balanceResponse?.data?.result / 10 ** 18
     : null;
-  const lastTx = txListResponse.data.result[0];
+  const lastTx = txListResponse?.data?.result[0];
   const firstTx =
-    txListResponse.data.result[txListResponse.data.result.length - 1];
+    txListResponse?.data?.result[txListResponse?.data?.result?.length - 1];
 
   // const type = tx.to.toLowerCase() === address.toLowerCase() ? "IN" : "OUT";
 
   return {
-    balance: balanceResponse.data.result / 10 ** 18,
+    balance: balanceResponse?.data?.result / 10 ** 18,
     balanceInEther,
-    allTransaction: txListResponse?.data?.result,
+    allTransaction: txListResponse?.data?.result || [],
 
     lastTx: {
-      hash: lastTx.hash,
-      blockNumber: lastTx.blockNumber,
-      from: lastTx.from,
-      to: lastTx.to,
-      value: lastTx.value,
-      timestamp: formatDate(lastTx.timeStamp),
-      gasUsed: lastTx.gasUsed,
-      gasPrice: lastTx.gasPrice,
-      fee: lastTx.gasUsed * parseInt(lastTx.gasPrice),
+      hash: lastTx?.hash,
+      blockNumber: lastTx?.blockNumber,
+      from: lastTx?.from,
+      to: lastTx?.to,
+      value: lastTx?.value,
+      timestamp: formatDate(lastTx?.timeStamp),
+      gasUsed: lastTx?.gasUsed,
+      gasPrice: lastTx?.gasPrice,
+      fee: lastTx?.gasUsed * parseInt(lastTx.gasPrice),
     },
     firstTx: {
-      hash: firstTx.hash,
-      blockNumber: firstTx.blockNumber,
-      from: firstTx.from,
-      to: firstTx.to,
-      value: firstTx.value,
-      timestamp: formatDate(firstTx.timeStamp),
-      gasUsed: firstTx.gasUsed,
-      gasPrice: firstTx.gasPrice,
-      fee: firstTx.gasUsed * parseInt(firstTx.gasPrice),
+      hash: firstTx?.hash,
+      blockNumber: firstTx?.blockNumber,
+      from: firstTx?.from,
+      to: firstTx?.to,
+      value: firstTx?.value,
+      timestamp: formatDate(firstTx?.timeStamp),
+      gasUsed: firstTx?.gasUsed,
+      gasPrice: firstTx?.gasPrice,
+      fee: firstTx?.gasUsed * parseInt(firstTx?.gasPrice),
     },
   };
 }

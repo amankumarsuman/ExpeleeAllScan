@@ -38,46 +38,41 @@ const columns = [
   { id: "TxnFee", label: "Txn Fee" },
 ];
 
-export default function TransactionTable({ address,network }) {
-  console.log(address,network,"data")
-  const[isLoading,setIsLoading]=React.useState(true)
+export default function TransactionTable({ data }) {
+  const [isLoading, setIsLoading] = React.useState(true);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-const [transactionData,setData]=React.useState(null)
+  const [transactionData, setData] = React.useState(null);
+  console.log(data);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const handleGetDetails = async () => {
-    try {
-   
-// 
-        const datas = await getWalletData(address, network);
-        // setWalletData(data);
-        console.log(datas,"transdata")
-        setData(datas?.allTransaction)
-        // setIsWalletAddr(true)
-        // setLoading(false);
+  // const handleGetDetails = async () => {
+  //   try {
+  //     //
+  //     const datas = await getWalletData(address, network);
+  //     // setWalletData(data);
 
-      
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     setData(datas?.allTransaction);
+  //     // setIsWalletAddr(true)
+  //     // setLoading(false);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
+  // React.useEffect(()=>{
+  // if(transactionData?.length>0 && Array.isArray(transactionData)){
+  //   setIsLoading(true)
+  // }else{
+  //   setIsLoading(false)
+  // }
+  // },[transactionData])
 
-
-// React.useEffect(()=>{
-// if(transactionData?.length>0 && Array.isArray(transactionData)){
-//   setIsLoading(true)
-// }else{
-//   setIsLoading(false)
-// }
-// },[transactionData])
-
-React.useEffect(()=>{
-  handleGetDetails()
-},[])
+  // React.useEffect(() => {
+  //   handleGetDetails();
+  // }, []);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -100,7 +95,6 @@ React.useEffect(()=>{
     return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds (${month} ${day}, ${year} ${time})`;
   };
 
-  console.log(transactionData,"transsssssssssss")
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -119,55 +113,63 @@ React.useEffect(()=>{
             </TableRow>
           </TableHead>
           <TableBody>
-            {transactionData && transactionData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    <TableCell sx={{ color: "green" }}>
-                      {row?.blockHash?.slice(0, 20)}...
-                    </TableCell>
-                    <TableCell style={{ textAlign: "left" }}>
-                      <div
-                        style={{
-                          border: "1px solid grey",
-                          borderRadius: "7px",
-                          textAlign: "center",
-                          backgroundColor: "green",
-                          color: "black",
-                        }}
-                      >
-                        {"Transfer"}
-                      </div>
-                    </TableCell>
-                    <TableCell sx={{ color: "green" }}>
-                      {row?.blockNumber}
-                    </TableCell>
-                    <TableCell>{formatDate(row?.timeStamp)}</TableCell>
-                    <TableCell sx={{ color: "green" }}>
-                      {row?.from?.slice(0, 20)}...
-                    </TableCell>
-                    <TableCell>{row?.to?.slice(0, 20)}...</TableCell>
-                    <TableCell>
-                      {(row?.value / 10 ** 18)?.toFixed(5)}ETH
-                    </TableCell>
-                    <TableCell>
-                      {(row?.gasPrice / 10 ** 18)?.toFixed(5)}ETH
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+            {data &&
+              data
+                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                ?.map((row) => {
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.code}
+                    >
+                      <TableCell sx={{ color: "green" }}>
+                        {row?.blockHash?.slice(0, 20)}...
+                      </TableCell>
+                      <TableCell style={{ textAlign: "left" }}>
+                        <div
+                          style={{
+                            border: "1px solid grey",
+                            borderRadius: "7px",
+                            textAlign: "center",
+                            backgroundColor: "green",
+                            color: "black",
+                          }}
+                        >
+                          {"Transfer"}
+                        </div>
+                      </TableCell>
+                      <TableCell sx={{ color: "green" }}>
+                        {row?.blockNumber}
+                      </TableCell>
+                      <TableCell>{formatDate(row?.timeStamp)}</TableCell>
+                      <TableCell sx={{ color: "green" }}>
+                        {row?.from?.slice(0, 20)}...
+                      </TableCell>
+                      <TableCell>{row?.to?.slice(0, 20)}...</TableCell>
+                      <TableCell>
+                        {(row?.value / 10 ** 18)?.toFixed(5)}ETH
+                      </TableCell>
+                      <TableCell>
+                        {(row?.gasPrice / 10 ** 18)?.toFixed(5)}ETH
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={transactionData?.length}
+        count={data?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
-  //  <></>
+    //  <></>
   );
 }

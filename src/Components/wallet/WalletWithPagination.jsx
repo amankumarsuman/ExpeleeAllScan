@@ -10,11 +10,10 @@ const TransactionsTable = ({ network, walletAddress }) => {
     const fetchTransactions = async () => {
       const walletData = await getWalletData(network, walletAddress);
       setTransactions(walletData);
-      console.log(walletData,"walletdata")
     };
     fetchTransactions();
   }, [network, walletAddress]);
-console.log(transactions,"transx")
+
   const indexOfLastTransaction = currentPage * transactionsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
   const currentTransactions = transactions.slice(
@@ -24,39 +23,42 @@ console.log(transactions,"transx")
 
   const renderTransactionsTable = () => {
     return (
-    //   <table>
-    //     <thead>
-    //       <tr>
-    //         <th>Block #</th>
-    //         <th>Timestamp</th>
-    //         <th>From</th>
-    //         <th>To</th>
-    //         <th>Value</th>
-    //       </tr>
-    //     </thead>
-    //     <tbody>
-    //       {currentTransactions.map((tx) => (
-    //         <tr key={tx.hash}>
-    //           <td>{tx.blockNumber}</td>
-    //           <td>{new Date(tx.timeStamp * 1000).toLocaleString()}</td>
-    //           <td>{tx.from}</td>
-    //           <td>{tx.to}</td>
-    //           <td>
-    //             {Number(tx.value) / 10 ** 18} {network === "ethereum" ? "ETH" : "MATIC"}
-    //           </td>
-    //         </tr>
-    //       ))}
-    //     </tbody>
-    //   </table>
+      //   <table>
+      //     <thead>
+      //       <tr>
+      //         <th>Block #</th>
+      //         <th>Timestamp</th>
+      //         <th>From</th>
+      //         <th>To</th>
+      //         <th>Value</th>
+      //       </tr>
+      //     </thead>
+      //     <tbody>
+      //       {currentTransactions.map((tx) => (
+      //         <tr key={tx.hash}>
+      //           <td>{tx.blockNumber}</td>
+      //           <td>{new Date(tx.timeStamp * 1000).toLocaleString()}</td>
+      //           <td>{tx.from}</td>
+      //           <td>{tx.to}</td>
+      //           <td>
+      //             {Number(tx.value) / 10 ** 18} {network === "ethereum" ? "ETH" : "MATIC"}
+      //           </td>
+      //         </tr>
+      //       ))}
+      //     </tbody>
+      //   </table>
 
-    <>
-    </>
+      <></>
     );
   };
 
   const renderPagination = () => {
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(transactions.length / transactionsPerPage); i++) {
+    for (
+      let i = 1;
+      i <= Math.ceil(transactions.length / transactionsPerPage);
+      i++
+    ) {
       pageNumbers.push(i);
     }
     return (
