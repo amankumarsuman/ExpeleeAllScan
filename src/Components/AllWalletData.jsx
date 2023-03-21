@@ -3,14 +3,21 @@ import BasicCard from "./Card";
 // import { formatUnits } from "ethers/lib/utils";
 import { getWalletData } from "./GetWalletData";
 import FullWidthTabs from "./Tabs";
-import { formatTransactionDetails, getTransactionDetails } from "./transactionDetails/Transaction-utils";
+import {
+  formatTransactionDetails,
+  getTransactionDetails,
+} from "./transactionDetails/Transaction-utils";
 import TransactionDetailsUI from "./transactionDetails/TransactionDetailsUI";
+
+import { getNetworkFromAddress } from "./getNetworkFromAddress";
 // assuming the getWalletData function is exported from a separate file
 import { css } from "@emotion/react";
 import PulseLoader from "react-spinners/PulseLoader";
-
-
-
+import { CircularProgress, Grid, TextField } from "@mui/material";
+import MediaCard from "./emptyCard/EmptyCard";
+import "./mainBodystyle.css";
+import Body from "./body/Body";
+import GasAndEthPrice from "./body/GasTracker";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -18,24 +25,24 @@ const override = css`
 
 function AllWalletDetails() {
   const [address, setAddress] = useState("");
-  const [transactionAddress, setTransactionAddress] = useState("");
-  const [network, setNetwork] = useState("ethereum");
+  const [transactionAddress, setTransactionAddress] = useState(false);
+  const [network, setNetwork] = useState(null);
   const [walletData, setWalletData] = useState(null);
   const [allTransaction, setAllTransaction] = useState();
   const [moreAddress, setMoreAddress] = useState([]);
   const [isWalletAddr, setIsWalletAddr] = useState(true);
   const [details, setDetails] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-console.log(details,isWalletAddr,address.length,allTransaction,"details")
-function Loader(){
-
-  if(walletData?.allTransaction?.length>0){
-  setLoading(true)
-  }else{
-    setLoading(false)
+  const [loading, setLoading] = useState(true);
+  const [inProgress, setInProgress] = useState(false);
+  const [internalTransaction,setInternalTransaction]=useState()
+  const [blockData,setBlockData]=useState()
+  function Loader() {
+    if (walletData?.allTransaction?.length > 0) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
   }
-}
   const handleAddressChange = (event) => {
     setAddress(event.target.value);
     // if(address?.length>42){
@@ -45,64 +52,125 @@ function Loader(){
     // }else{
     //   alert("Address is neither wallet address nor transaction hash")
     // }
-
   };
 
-  const handleNetworkChange = (event) => {
-    setNetwork(event.target.value);
+  // const handleNetworkChange = (event) => {
+  //   setNetwork(event.target.value);
+  // };
+  const handleNetworkChange = async (event) => {
+    // event.preventDefault();
+    const networks = await getNetworkFromAddress(address);
+    console.log(networks, "networks");
+    setNetwork(networks);
   };
-
   const handleGetDetails = async () => {
     try {
       if (address?.length > 42) {
-        setLoading(true);
-
+        setInProgress(true);
+        // console.log("called1");
+        const networkName = await getNetworkFromAddress(address);
+        console.log(networkName, "network");
+        // setLoading(true);
+        setTransactionAddress(true);
+        setIsWalletAddr(false);
         // alert("Please enter correct wallet address");
-        const TransactionResult = await getTransactionDetails(address, network);
+        const TransactionResult = await getTransactionDetails(
+          address,
+          networkName
+        );
         const formattedDetails = formatTransactionDetails(TransactionResult);
         setDetails(formattedDetails);
-      setLoading(false);
-
-        
-      } 
-      
-      else if(address?.length <50) {
-      // setLoading(true);
-// 
-        const data = await getWalletData(address, network);
-        setWalletData(data);
-        setAllTransaction(data?.allTransaction)
+        setLoading(false);
+        setInProgress(false);
+        // setLoading(false);
+      } else if (address?.length < 50) {
+        // setLoading(true);
+        //
+        setInProgress(true);
+        const networkName = await getNetworkFromAddress(address);
+        console.log(networkName, "network");
+        setTransactionAddress(false);
+        setIsWalletAddr(true);
+        // console.log("called2");
+        const data = await getWalletData(address, networkName);
+        // console.log(
+        //   data?.allTransaction?.length,
+        //   data?.allTransaction,
+        //   data,
+        //   "transaction"
+        // );
+        if (
+          data?.allTransaction?.length > 0 &&
+          data?.allTransaction !== "Error! Invalid address format"
+        ) {
+          setWalletData(data);
+          setAllTransaction(data?.allTransaction);
+          setInternalTransaction(data?.internalTxn)
+          setBlockData(data?.blockDetails)
+          setLoading(false);
+          setInProgress(false);
+          console.log(data?.blockDetails,data,"data block chek")
+        }
         // setIsWalletAddr(true)
         // setLoading(false);
-
       }
     } catch (error) {
       console.error(error);
     }
   };
-  console.log(walletData);
 
-  useEffect(()=>{
-    
-// if(address.length>42){
-//   setIsWalletAddr(false)
-// }
-// else if(address?.length<50){
-//   setIsWalletAddr(true)
+  useEffect(() => {
+    // if(address.length>42){
+    //   setIsWalletAddr(false)
+    // }
+    // else if(address?.length<50){
+    //   setIsWalletAddr(true)
 
-// }
-handleGetDetails()
-// Loader()
-  },[address])
-  console.log(walletData,walletData?.allTransaction,loading,"loading")
+    // }
+
+    handleNetworkChange();
+    if (network) {
+      handleGetDetails();
+    }
+
+    // Loader()
+  }, [address]);
+
+  console.log(inProgress, "inProgress");
   return (
-    <div>
-      <label>
+    <div style={{ marginTop: "1em" }}>
+      {/* <label>
         Wallet address:{" "}
         <input type="text" value={address} onChange={handleAddressChange} />
-      </label>
-      <br />
-      <label>
+      </label> */}
+      <div className="container">
+        <div className="main">
+          <div style={{width:"90%"}}>
+
+          <GasAndEthPrice/>
+          </div>
+          <h1 style={{marginTop:"1em"}}>The All Network Explorer</h1>
+          <span>
+            <TextField
+              style={{ width: "60%", marginTop: "2%" }}
+              fullWidth
+              variant="outlined"
+              label="Search transactions, addresses, or blocks..."
+              name="address"
+              onChange={handleAddressChange}
+            />
+            <p style={{ fontSize: "15px", fontWeight: "bold" }}>
+              Featured: Build Precise & Reliable Apps with AllScan APIs. Learn
+              More!
+              <span style={{ color: "green", fontWeight: "bold" }}>
+                (Coming soon)
+              </span>
+            </p>
+          </span>
+        </div>
+      </div>
+      {/* <br /> */}
+      {/* <label>
         Network:{" "}
         <select value={network} onChange={handleNetworkChange}>
           <option value="ethereum">Ethereum</option>
@@ -110,117 +178,73 @@ handleGetDetails()
           <option value="arbitrum">Arbitrum</option>
           <option value="bsc">BSC</option>
         </select>
-      </label>
-      <br />
-      <button onClick={handleGetDetails}>Get details</button>
-      <hr />
-      {/* {walletData && (
-        <div>
-          <p>Balance: {walletData.balanceInEther} ETH</p>
-          <p>Last transaction:</p>
-          <ul>
-            <li>Hash: {walletData.lastTx.hash}</li>
-            <li>From: {walletData.lastTx.from}</li>
-            <li>To: {walletData.lastTx.to}</li>
-            <li>Value: {walletData.lastTx.value / 10 ** 18} ETH</li>
-            <li>Timestamp: {walletData.lastTx.timestamp}</li>
-            <li>Gas used: {walletData.lastTx.gasUsed}</li>
-            <li>Gas price: {walletData.lastTx.gasPrice} Gwei</li>
-            <li>Fee: {walletData.lastTx.fee / 10 ** 18} ETH</li>
-          </ul>
-          <p>First transaction:</p>
-          <ul>
-            <li>Hash: {walletData.firstTx.hash}</li>
-            <li>From: {walletData.firstTx.from}</li>
-            <li>To: {walletData.firstTx.to}</li>
-            <li>Value: {walletData.firstTx.value / 10 ** 18} ETH</li>
-            <li>Timestamp: {walletData.firstTx.timestamp}</li>
-            <li>Gas used: {walletData.firstTx.gasUsed}</li>
-            <li>Gas price: {walletData.firstTx.gasPrice} Gwei</li>
-            <li>Fee: {walletData.firstTx.fee / 10 ** 18} ETH</li>
-          </ul>
-        </div>
-      )} */}
-      {isWalletAddr && walletData ?
+      </label> */}
+      {/* <br /> */}
+      {/* <button onClick={handleGetDetails}>Get details</button> */}
+      {/* <hr /> */}
 
+      {/* {walletData ? ( */}
+
+      {/* {!walletData || !allTransaction || !details ? <Body /> : null} */}
+
+      {loading ? (
+        <Body />
+      ) : inProgress ? (
+        <CircularProgress color="inherit" />
+      ) : walletData && isWalletAddr && allTransaction.length > 0 ? (
         <>
-
-          <div
+          {/* <div
             style={{
               width: "90%",
               margin: "auto",
               display: "flex",
               justifyContent: "space-between",
             }}
-          >
-            {walletData &&  (
-              <BasicCard
-                balance={walletData?.balance}
-                balanceInEther={walletData?.balanceInEther}
-                network={network}
-              />
-              // <div>
-              //   <p>
-              //     Balance: {balance} wei ({balanceInEther} ether)
-              //   </p>
-              // </div>
+          > */}
+          <Grid container spacing={2} sx={{ width: "90%", margin: "auto" }}>
+            {walletData && (
+              <Grid item xs={12} md={4}>
+                <BasicCard
+                  balance={walletData?.balance}
+                  balanceInEther={walletData?.balanceInEther}
+                  network={network}
+                />
+              </Grid>
             )}
             {walletData && (
-              // <div>
-              //   <p>Last Transaction:</p>
-              //   <ul>
-              //     <li>Hash: {lastTx.hash}</li>
-              //     <li>Block Number: {lastTx.blockNumber}</li>
-              //     <li>
-              //       Value: {lastTx.value} wei ({lastTx.value / 10 ** 18} ether)
-              //     </li>
-              //     <li>Timestamp: {formatDate(lastTx.timeStamp)}</li>
-              //   </ul>
-              // </div>
-
-              <BasicCard
-                lastTxn={walletData?.lastTx.hash}
-                lastTxnBlockNumber={walletData?.lastTx.blockNumber}
-                lastTxnTime={walletData?.lastTx.timeStamp}
-                firstTxn={walletData?.firstTx.hash}
-                firstTxnBlockNumber={walletData?.firstTx.blockNumber}
-                firstTxnTime={walletData?.firstTx.timeStamp}
-              />
+              <Grid item xs={12} md={4}>
+                <BasicCard
+                  lastTxn={walletData?.lastTx.hash}
+                  lastTxnBlockNumber={walletData?.lastTx.blockNumber}
+                  lastTxnTime={walletData?.lastTx.timestamp}
+                  firstTxn={walletData?.firstTx.hash}
+                  firstTxnBlockNumber={walletData?.firstTx.blockNumber}
+                  firstTxnTime={walletData?.firstTx.timestamp}
+                />
+              </Grid>
             )}
             {walletData && (
-              // <div>
-              //   <p>First Transaction:</p>
-              //   <ul>
-              //     <li>Hash: {firstTx.hash}</li>
-              //     <li>Block Number: {firstTx.blockNumber}</li>
-              //     <li>
-              //       Value: {firstTx.value} wei ({firstTx.value / 10 ** 18} ether)
-              //     </li>
-              //     <li>Timestamp: {formatDate(firstTx.timeStamp)}</li>
-              //   </ul>
-              // </div>
-              <BasicCard moreAddress={moreAddress} />
+              <Grid item xs={12} md={4}>
+                <BasicCard moreAddress={moreAddress} />
+              </Grid>
             )}
-          </div>
-          {/* {loading ?  
-      <PulseLoader color={"#007bff"} loading={loading} css={override} />
-:
-} */}
-<FullWidthTabs network={network} address={address}   />
-        </> :
-! isWalletAddr?        
-        // <div>
-        <>
-        
-        <TransactionDetailsUI data={details} />
+            {/* </div> */}
+          </Grid>
+          {allTransaction && !loading && (
+            <FullWidthTabs data={allTransaction ? allTransaction : [] } internalTxn={internalTransaction} blockData={blockData} />
+          )}
         </>
-
-        // </div>
-        :<div>"We are working on Contract/Token Address part"</div>
-      }
-
-{/* <TransactionDetailsUI data={details} /> */}
-
+      ) : details && transactionAddress ? (
+        <div>
+          <>
+            <TransactionDetailsUI data={details}  />
+          </>
+        </div>
+      ) : (
+        <div style={{ width: "30%", margin: "auto" }}>
+          <MediaCard />
+        </div>
+      )}
     </div>
   );
 }

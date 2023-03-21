@@ -50,7 +50,7 @@ function WalletDataWithTime() {
 
     return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds (${month} ${day}, ${year} ${time})`;
   };
-  console.log(allTransaction, "all");
+
   return (
     <div>
       <form onSubmit={handleSubmit}>

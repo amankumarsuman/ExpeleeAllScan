@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { formatTransactionDetails, getContractOrTokenDetails, getTransactionDetails } from "./Transaction-utils";
+import {
+  formatTransactionDetails,
+  getContractOrTokenDetails,
+  getTransactionDetails,
+} from "./Transaction-utils";
 import TransactionDetailsUI from "./TransactionDetailsUI";
 
 function ContractDetails() {
@@ -12,10 +16,12 @@ function ContractDetails() {
     event.preventDefault();
     setError(null);
     try {
-      const TransactionResult = await getContractOrTokenDetails(transactionHash, network);
+      const TransactionResult = await getContractOrTokenDetails(
+        transactionHash,
+        network
+      );
       const formattedDetails = formatTransactionDetails(TransactionResult);
       setDetails(formattedDetails);
-      console.log(formattedDetails,"formattedDetails")
     } catch (e) {
       setError(e.message);
     }
@@ -50,7 +56,7 @@ function ContractDetails() {
       {error && <div>Error: {error}</div>}
       {details && (
         <div>
-          <TransactionDetailsUI data={details}/>
+          <TransactionDetailsUI data={details} />
           {/* <p>Hash: {details.blockHash}</p>
           <p>Status: {details.status}</p>
           <p>Block Number: {details.blockNumber}</p>
@@ -66,4 +72,4 @@ function ContractDetails() {
   );
 }
 
-export {ContractDetails}
+export { ContractDetails };

@@ -8,6 +8,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TransactionTable from "./TransactionTable";
+import BlockDataTable from "./BlockDataTable";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -42,7 +43,7 @@ function a11yProps(index) {
   };
 }
 
-export default function FullWidthTabs({ network,address }) {
+export default function FullWidthTabs({ data,internalTxn,blockData }) {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -53,7 +54,7 @@ export default function FullWidthTabs({ network,address }) {
   const handleChangeIndex = (index) => {
     setValue(index);
   };
-// console.log(data)
+  console.log(blockData,"internalTxn")
   return (
     <Box sx={{ bgcolor: "background.paper", width: "90%", margin: "auto" }}>
       <AppBar position="static">
@@ -79,19 +80,27 @@ export default function FullWidthTabs({ network,address }) {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <TransactionTable network={network} address={address} />
+          <TransactionTable
+            // network={network} address={address}
+            data={data}
+          />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          <h4>Internal Transaction will come soon</h4>
-          <p>We are working on it</p>
+          {/* <h4>Internal Transaction will come soon</h4>
+          <p>We are working on it</p> */}
+           <TransactionTable
+            // network={network} address={address}
+            data={internalTxn}
+          />
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
           <h4>Token Transfers(ERC-20) Details will come soon</h4>
           <p>We are working on it</p>
         </TabPanel>
         <TabPanel value={value} index={3} dir={theme.direction}>
-          <h4>Produced Block Details will come soon</h4>
-          <p>We are working on it</p>
+          {/* <h4>Produced Block Details will come soon</h4>
+          <p>We are working on it</p> */}
+          <BlockDataTable data={blockData} />
         </TabPanel>
         <TabPanel value={value} index={4} dir={theme.direction}>
           <h4>Analytics Details will come soon</h4>

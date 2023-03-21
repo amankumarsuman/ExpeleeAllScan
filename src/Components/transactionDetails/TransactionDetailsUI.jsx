@@ -56,60 +56,81 @@
 
 // export default TransactionDetailsUI;
 
-
-import React from 'react'
-import {Grid, Paper} from "@mui/material"
-function TransactionDetailsUI({data}) {
-  console.log(data,"dataaaa")
+import React from "react";
+import { Grid, Paper } from "@mui/material";
+import { formatDate } from "../getNetworkFromAddress";
+function TransactionDetailsUI({ data }) {
+  console.log(data, "transactionDetails");
   return (
-   <>
-<Paper sx={{width:"80%",margin:"auto" ,padding:"20px"}} elevation={6}>
-
-  <Grid spacing={3} container>
-    <Grid  sx={{textAlign:"left"}} item xs={12} md={2}>
-Hash
-    </Grid>
-    <Grid  sx={{textAlign:"left"}}item xs={12} md={10}>
-    {data?.blockHash}
-    </Grid>
-    <Grid  sx={{textAlign:"left"}} item xs={12} md={2}>
-Status
-    </Grid>
-    <Grid sx={{textAlign:"left"}} item xs={12} md={10}>
-    {data?<button style={{background:"green",color:"white",borderRadius:"10px",border:"none"}}>Success</button>:<button>Fail</button>}
-    </Grid>
-    <Grid  sx={{textAlign:"left"}}item xs={12} md={2}>
-    Block Number:
-    </Grid>
-    <Grid sx={{textAlign:"left"}} item xs={12} md={10}>
-    {data?.blockNumber}
-    </Grid>
-    <Grid  sx={{textAlign:"left"}} item xs={12} md={2}>
-    Gas Used:
-    </Grid>
-    <Grid sx={{textAlign:"left"}} item xs={12} md={10}>
-    {data?.gasUsedWei}
-    </Grid>
-    <Grid  sx={{textAlign:"left"}}item xs={12} md={2}>
-    Gas Price:
-    </Grid>
-    <Grid sx={{textAlign:"left"}} item xs={12} md={10}>
-    {data?.gasPriceGwei}
-    </Grid>
-    <Grid  sx={{textAlign:"left"}}item xs={12} md={2}>
-     From:
-    </Grid>
-    <Grid sx={{textAlign:"left"}} item xs={12} md={10}>
-    {data?.from}
-    </Grid>
-    <Grid  sx={{textAlign:"left"}}item xs={12} md={2}>
-     To:
-    </Grid>
-    <Grid sx={{textAlign:"left"}} item xs={12} md={10}>
-    {data?.to}
-    </Grid>
-  </Grid>
-{/* <p>Hash: {data.blockHash}</p>
+    <>
+      <Paper
+        sx={{ width: "80%", margin: "auto", padding: "20px" }}
+        elevation={6}
+      >
+        <Grid spacing={3} container>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={2}>
+            Hash
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={10}>
+            {data?.hash}
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={2}>
+            Status
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={10}>
+            {data ? (
+              <button
+                style={{
+                  background: "green",
+                  color: "white",
+                  borderRadius: "10px",
+                  border: "none",
+                }}
+              >
+                Success
+              </button>
+            ) : (
+              <button>Fail</button>
+            )}
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={2}>
+            Block Number:
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={10}>
+            {data?.blockNumber}
+          </Grid>
+          {/* <Grid sx={{ textAlign: "left" }} item xs={12} md={2}>
+            Time Stamp:
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={10}>
+            {formatDate(data?.blockNumber)}
+          </Grid> */}
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={2}>
+            Gas Used:
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={10}>
+            {data?.gasUsedWei}
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={2}>
+            Gas Price:
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={10}>
+            {data?.gasPriceGwei}
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={2}>
+            From:
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={10}>
+            {data?.from}
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={2}>
+            To:
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={10}>
+            {data?.to}
+          </Grid>
+        </Grid>
+        {/* <p>Hash: {data.blockHash}</p>
           <p>Status: {data.status}</p>
           <p>Block Number: {data.blockNumber}</p>
           <p>Gas Used: {data.gasUsedWei}</p>
@@ -118,9 +139,9 @@ Status
           <p>To: {data.to}</p>
           <p>Value: {data.value}</p>
           <p>Data: {data.Data}</p> */}
-</Paper>
-   </>
-  )
+      </Paper>
+    </>
+  );
 }
 
-export default TransactionDetailsUI
+export default TransactionDetailsUI;

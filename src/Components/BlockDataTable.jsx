@@ -12,35 +12,26 @@ import { getTransactionDetails } from "./transactionDetails/Transaction-utils";
 // import { getWalletData } from "./transactionDetails/Transaction-utils";
 
 const columns = [
-  { id: "TxnHash", label: "Txn Hash" },
-  { id: "method", label: "Method" },
+  { id: "block", label: "Block" },
+  { id: "age", label: "Age" },
   {
-    id: "Block",
-    label: "Block",
+    id: "transactionIndex",
+    label: "Transaction Index",
 
     align: "left",
     // format: (value) => value.toLocaleString("en-US")
   },
   {
-    id: "Age",
-    label: "Age",
+    id: "GasUsed",
+    label: "Gas Used",
 
     align: "left",
     // format: (value) => value.toLocaleString("en-US")
   },
-  {
-    id: "From",
-    label: "From",
-
-    align: "left",
-    // format: (value) => value.toFixed(2)
-  },
-  { id: "to", label: "To" },
-  { id: "Value", label: "Value" },
-  { id: "TxnFee", label: "Txn Fee" },
+  
 ];
 
-export default function TransactionTable({ data }) {
+export default function BlockDataTable({ data }) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -129,7 +120,7 @@ export default function TransactionTable({ data }) {
                       key={row.code}
                     >
                       <TableCell sx={{ color: "green" }}>
-                        {row?.hash?.slice(0, 20)}...
+                        {row?.blockNumber}
                       </TableCell>
                       <TableCell style={{ textAlign: "left" }}>
                         <div
@@ -141,23 +132,18 @@ export default function TransactionTable({ data }) {
                             color: "black",
                           }}
                         >
-                          {"Transfer"}
+                          {formatDate(row?.timestamp)}
                         </div>
                       </TableCell>
+
                       <TableCell sx={{ color: "green" }}>
-                        {row?.blockNumber}
+                        {row?.transactionIndex}
                       </TableCell>
-                      <TableCell>{formatDate(row?.timeStamp)}</TableCell>
+                     
                       <TableCell sx={{ color: "green" }}>
-                        {row?.from?.slice(0, 20)}...
+                        {row?.gasUsed}
                       </TableCell>
-                      <TableCell>{row?.to?.slice(0, 20)}...</TableCell>
-                      <TableCell>
-                        {(row?.value / 10 ** 18)?.toFixed(5)}ETH
-                      </TableCell>
-                      <TableCell>
-                        {(row?.gasPrice / 10 ** 18)?.toFixed(5)}ETH
-                      </TableCell>
+                     
                     </TableRow>
                   );
                 })}
