@@ -15,7 +15,8 @@ import { css } from "@emotion/react";
 import PulseLoader from "react-spinners/PulseLoader";
 import { Grid, TextField } from "@mui/material";
 import MediaCard from "./emptyCard/EmptyCard";
-
+import "./mainBodystyle.css";
+import Body from "./body/Body";
 const override = css`
   display: block;
   margin: 0 auto;
@@ -133,18 +134,29 @@ function AllWalletDetails() {
         Wallet address:{" "}
         <input type="text" value={address} onChange={handleAddressChange} />
       </label> */}
-
-      <span>
-        <TextField
-          style={{ width: "60%", marginTop: "2%" }}
-          fullWidth
-          variant="outlined"
-          label="Search transactions, addresses, or blocks..."
-          name="address"
-          onChange={handleAddressChange}
-        />
-      </span>
-      <br />
+      <div className="container">
+        <div className="main">
+          <h1>The All Network Explorer</h1>
+          <span>
+            <TextField
+              style={{ width: "60%", marginTop: "2%" }}
+              fullWidth
+              variant="outlined"
+              label="Search transactions, addresses, or blocks..."
+              name="address"
+              onChange={handleAddressChange}
+            />
+            <p style={{ fontSize: "15px", fontWeight: "bold" }}>
+              Featured: Build Precise & Reliable Apps with AllScan APIs. Learn
+              More!
+              <span style={{ color: "green", fontWeight: "bold" }}>
+                (Coming soon)
+              </span>
+            </p>
+          </span>
+        </div>
+      </div>
+      {/* <br /> */}
       {/* <label>
         Network:{" "}
         <select value={network} onChange={handleNetworkChange}>
@@ -154,13 +166,16 @@ function AllWalletDetails() {
           <option value="bsc">BSC</option>
         </select>
       </label> */}
-      <br />
+      {/* <br /> */}
       {/* <button onClick={handleGetDetails}>Get details</button> */}
-      <hr />
+      {/* <hr /> */}
 
       {/* {walletData ? ( */}
+
+      {/* {!walletData || !allTransaction || !details ? <Body /> : null} */}
+
       {loading ? (
-        <PulseLoader />
+        <Body />
       ) : walletData && isWalletAddr && allTransaction.length > 0 ? (
         <>
           {/* <div
