@@ -13,7 +13,7 @@ import { getNetworkFromAddress } from "./getNetworkFromAddress";
 // assuming the getWalletData function is exported from a separate file
 import { css } from "@emotion/react";
 import PulseLoader from "react-spinners/PulseLoader";
-import { TextField } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import MediaCard from "./emptyCard/EmptyCard";
 
 const override = css`
@@ -163,34 +163,43 @@ function AllWalletDetails() {
         <PulseLoader />
       ) : walletData && isWalletAddr && allTransaction.length > 0 ? (
         <>
-          <div
+          {/* <div
             style={{
               width: "90%",
               margin: "auto",
               display: "flex",
               justifyContent: "space-between",
             }}
-          >
+          > */}
+          <Grid container spacing={2} sx={{ width: "90%", margin: "auto" }}>
             {walletData && (
-              <BasicCard
-                balance={walletData?.balance}
-                balanceInEther={walletData?.balanceInEther}
-                network={network}
-              />
+              <Grid item xs={12} md={4}>
+                <BasicCard
+                  balance={walletData?.balance}
+                  balanceInEther={walletData?.balanceInEther}
+                  network={network}
+                />
+              </Grid>
             )}
             {walletData && (
-              <BasicCard
-                lastTxn={walletData?.lastTx.hash}
-                lastTxnBlockNumber={walletData?.lastTx.blockNumber}
-                lastTxnTime={walletData?.lastTx.timeStamp}
-                firstTxn={walletData?.firstTx.hash}
-                firstTxnBlockNumber={walletData?.firstTx.blockNumber}
-                firstTxnTime={walletData?.firstTx.timeStamp}
-              />
+              <Grid item xs={12} md={4}>
+                <BasicCard
+                  lastTxn={walletData?.lastTx.hash}
+                  lastTxnBlockNumber={walletData?.lastTx.blockNumber}
+                  lastTxnTime={walletData?.lastTx.timeStamp}
+                  firstTxn={walletData?.firstTx.hash}
+                  firstTxnBlockNumber={walletData?.firstTx.blockNumber}
+                  firstTxnTime={walletData?.firstTx.timeStamp}
+                />
+              </Grid>
             )}
-            {walletData && <BasicCard moreAddress={moreAddress} />}
-          </div>
-
+            {walletData && (
+              <Grid item xs={12} md={4}>
+                <BasicCard moreAddress={moreAddress} />
+              </Grid>
+            )}
+            {/* </div> */}
+          </Grid>
           {allTransaction && !loading && (
             <FullWidthTabs data={allTransaction ? allTransaction : []} />
           )}

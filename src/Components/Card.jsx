@@ -20,7 +20,7 @@ export default function BasicCard(props) {
   console.log(props, "props");
   return (
     <>
-      <Card sx={{ minWidth: 475, marginTop: "2em", marginBottom: "2em" }}>
+      <Card sx={{ marginTop: "2em", minHeight: 240, marginBottom: "2em" }}>
         <CardContent sx={{ textAlign: "left" }}>
           <Typography
             sx={{ fontSize: 14, textAlign: "left" }}
