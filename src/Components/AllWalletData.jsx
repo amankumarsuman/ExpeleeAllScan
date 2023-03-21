@@ -55,13 +55,13 @@ function Loader(){
   const handleGetDetails = async () => {
     try {
       if (address?.length > 42) {
-        // setLoading(true);
+        setLoading(true);
 
         // alert("Please enter correct wallet address");
         const TransactionResult = await getTransactionDetails(address, network);
         const formattedDetails = formatTransactionDetails(TransactionResult);
         setDetails(formattedDetails);
-      // setLoading(false);
+      setLoading(false);
 
         
       } 

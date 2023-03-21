@@ -197,6 +197,7 @@ function formatTransactionDetails(transactionDetails) {
 //   }
   
 async function getWalletData(network, walletAddress) {
+    console.log(network,walletAddress,"api check")
     let apiUrl;
     let symbol;
     let decimals;

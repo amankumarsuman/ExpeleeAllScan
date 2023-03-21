@@ -7,7 +7,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { getWalletData } from "./transactionDetails/Transaction-utils";
+import { getWalletData } from "./GetWalletData";
+import { getTransactionDetails } from "./transactionDetails/Transaction-utils";
+// import { getWalletData } from "./transactionDetails/Transaction-utils";
 
 const columns = [
   { id: "TxnHash", label: "Txn Hash" },
@@ -52,7 +54,7 @@ const [transactionData,setData]=React.useState(null)
     try {
    
 // 
-        const datas = await getWalletData(address, network);
+        const datas = await getTransactionDetails(address, network);
         // setWalletData(data);
         console.log(datas,"transdata")
         setData(datas?.allTransaction)
