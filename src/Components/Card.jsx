@@ -36,7 +36,13 @@ export default function BasicCard(props) {
             </span>
           </Typography>
           <Typography component="div">
-            {props?.balance
+            {props?.network === "ethereum"
+              ? "ETH BALANCE"
+              : props?.network === "polygon"
+              ? "MATIC BALANCE"
+              : props?.network === "bsc"
+              ? "BNB BALANCE"
+              : props?.network === "arbitrum"
               ? "ETH BALANCE"
               : props?.lastTxn
               ? "PRIVATE NAME TAGS"
@@ -90,18 +96,12 @@ export default function BasicCard(props) {
               : null}
           </Typography>
           <Typography variant="body2">
-            {props?.balance ? (
-              `$42,646.80 (@ $1,788.53/${
-                props?.network === "ethereum"
-                  ? "ETH"
-                  : props?.network === "polygon"
-                  ? "MATIC"
-                  : props?.network === "bsc"
-                  ? "BNB"
-                  : props?.network === "arbitrum"
-                  ? "ETH"
-                  : "ETH"
-              })`
+            {props?.network === "Ethereum" ? (
+              `$42,646.80 (@ $1,788.53/ETH)`
+            ) : props?.network === "polygon" ? (
+              "$12,839.53 (@ $1.12/MATIC)"
+            ) : props?.network === "bsc" ? (
+              "$53.99 (@ $335.12/BNB)"
             ) : props.lastTxn ? (
               <>
                 <span style={{ color: "green" }}>

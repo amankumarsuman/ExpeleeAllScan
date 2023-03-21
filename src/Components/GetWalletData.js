@@ -18,7 +18,7 @@ async function getWalletData(address, network) {
       apiKey = "C2IEDITCYBW6YPG5CX32P8MGE8UKU48PVA";
       break;
     case "bsc":
-      apiUrl = "https://api.bscscan.com/api";
+      apiUrl = "https://api.bscscan.com/";
       apiKey = "X9U59HU5Y5K5SHFN7WSNM6KIMJCYJMCAXP";
       break;
     default:
