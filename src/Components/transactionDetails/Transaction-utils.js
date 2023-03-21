@@ -2,12 +2,12 @@ async function getTransactionDetails(transactionHash, network) {
   let baseUrl, apiKey;
 
   switch (network) {
-    case "ethereum":
+    case "Ethereum":
       baseUrl = {
-        ethereum: "https://api.etherscan.io/api",
+        Ethereum: "https://api.etherscan.io/api",
       };
       apiKey = {
-        ethereum: "N98ZV19DWMZZ2HPA5J4NS7BVK1GRQ1QGSR",
+        Ethereum: "N98ZV19DWMZZ2HPA5J4NS7BVK1GRQ1QGSR",
       };
       break;
     case "arbitrum":
@@ -93,7 +93,7 @@ async function getContractOrTokenDetails(address, network) {
   let baseUrl, apiKey;
 
   switch (network) {
-    case "ethereum":
+    case "Ethereum":
       baseUrl = {
         ethereum: "https://api.etherscan.io/api",
       };
@@ -180,7 +180,7 @@ async function getWalletData(network, walletAddress) {
   let symbol;
   let decimals;
   switch (network.toLowerCase()) {
-    case "ethereum":
+    case "Ethereum":
       apiUrl = `https://api.etherscan.io/api?module=account&action=balance&address=${walletAddress}&apikey=${"N98ZV19DWMZZ2HPA5J4NS7BVK1GRQ1QGSR"}`;
       symbol = "ETH";
       decimals = 18;

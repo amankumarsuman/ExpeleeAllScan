@@ -8,9 +8,13 @@ import {
   getTransactionDetails,
 } from "./transactionDetails/Transaction-utils";
 import TransactionDetailsUI from "./transactionDetails/TransactionDetailsUI";
+
+import { getNetworkFromAddress } from "./getNetworkFromAddress";
 // assuming the getWalletData function is exported from a separate file
 import { css } from "@emotion/react";
 import PulseLoader from "react-spinners/PulseLoader";
+import { TextField } from "@mui/material";
+import MediaCard from "./emptyCard/EmptyCard";
 
 const override = css`
   display: block;
@@ -20,7 +24,7 @@ const override = css`
 function AllWalletDetails() {
   const [address, setAddress] = useState("");
   const [transactionAddress, setTransactionAddress] = useState(false);
-  const [network, setNetwork] = useState("ethereum");
+  const [network, setNetwork] = useState(null);
   const [walletData, setWalletData] = useState(null);
   const [allTransaction, setAllTransaction] = useState();
   const [moreAddress, setMoreAddress] = useState([]);
@@ -46,24 +50,29 @@ function AllWalletDetails() {
     // }
   };
 
-  const handleNetworkChange = (event) => {
-    setNetwork(event.target.value);
-  };
-  // const handleNetworkChange = async (event) => {
-  //   event.preventDefault();
-  //   const network = await getNetworkFromAddress(address);
-  //   setNetwork(network || "Unknown");
+  // const handleNetworkChange = (event) => {
+  //   setNetwork(event.target.value);
   // };
+  const handleNetworkChange = async (event) => {
+    // event.preventDefault();
+    const networks = await getNetworkFromAddress(address);
+    console.log(networks, "networks");
+    setNetwork(networks);
+  };
   const handleGetDetails = async () => {
     try {
       if (address?.length > 42) {
         console.log("called1");
-
+        const networkName = await getNetworkFromAddress(address);
+        console.log(networkName, "network");
         // setLoading(true);
         setTransactionAddress(true);
         setIsWalletAddr(false);
         // alert("Please enter correct wallet address");
-        const TransactionResult = await getTransactionDetails(address, network);
+        const TransactionResult = await getTransactionDetails(
+          address,
+          networkName
+        );
         const formattedDetails = formatTransactionDetails(TransactionResult);
         setDetails(formattedDetails);
         setLoading(false);
@@ -72,10 +81,12 @@ function AllWalletDetails() {
       } else if (address?.length < 50) {
         // setLoading(true);
         //
+        const networkName = await getNetworkFromAddress(address);
+        console.log(networkName, "network");
         setTransactionAddress(false);
         setIsWalletAddr(true);
         console.log("called2");
-        const data = await getWalletData(address, network);
+        const data = await getWalletData(address, networkName);
         console.log(
           data?.allTransaction?.length,
           data?.allTransaction,
@@ -106,20 +117,35 @@ function AllWalletDetails() {
     //   setIsWalletAddr(true)
 
     // }
-    handleGetDetails();
-    // handleNetworkChange();
+
+    handleNetworkChange();
+    if (network) {
+      handleGetDetails();
+    }
+
     // Loader()
   }, [address]);
 
-  console.log(details, transactionAddress, isWalletAddr, "details");
+  console.log(walletData, network, "details");
   return (
     <div>
-      <label>
+      {/* <label>
         Wallet address:{" "}
         <input type="text" value={address} onChange={handleAddressChange} />
-      </label>
+      </label> */}
+
+      <span>
+        <TextField
+          style={{ width: "60%", marginTop: "2%" }}
+          fullWidth
+          variant="outlined"
+          label="Search transactions, addresses, or blocks..."
+          name="address"
+          onChange={handleAddressChange}
+        />
+      </span>
       <br />
-      <label>
+      {/* <label>
         Network:{" "}
         <select value={network} onChange={handleNetworkChange}>
           <option value="ethereum">Ethereum</option>
@@ -127,9 +153,9 @@ function AllWalletDetails() {
           <option value="arbitrum">Arbitrum</option>
           <option value="bsc">BSC</option>
         </select>
-      </label>
+      </label> */}
       <br />
-      <button onClick={handleGetDetails}>Get details</button>
+      {/* <button onClick={handleGetDetails}>Get details</button> */}
       <hr />
 
       {/* {walletData ? ( */}
@@ -176,7 +202,9 @@ function AllWalletDetails() {
           </>
         </div>
       ) : (
-        <div>"We are working on Contract/Token Address part"</div>
+        <div style={{ width: "30%", margin: "auto" }}>
+          <MediaCard />
+        </div>
       )}
     </div>
   );

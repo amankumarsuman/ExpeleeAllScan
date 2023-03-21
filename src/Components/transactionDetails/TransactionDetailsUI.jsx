@@ -58,6 +58,7 @@
 
 import React from "react";
 import { Grid, Paper } from "@mui/material";
+import { formatDate } from "../getNetworkFromAddress";
 function TransactionDetailsUI({ data }) {
   console.log(data, "transactionDetails");
   return (
@@ -71,7 +72,7 @@ function TransactionDetailsUI({ data }) {
             Hash
           </Grid>
           <Grid sx={{ textAlign: "left" }} item xs={12} md={10}>
-            {data?.blockHash}
+            {data?.hash}
           </Grid>
           <Grid sx={{ textAlign: "left" }} item xs={12} md={2}>
             Status
@@ -98,6 +99,12 @@ function TransactionDetailsUI({ data }) {
           <Grid sx={{ textAlign: "left" }} item xs={12} md={10}>
             {data?.blockNumber}
           </Grid>
+          {/* <Grid sx={{ textAlign: "left" }} item xs={12} md={2}>
+            Time Stamp:
+          </Grid>
+          <Grid sx={{ textAlign: "left" }} item xs={12} md={10}>
+            {formatDate(data?.blockNumber)}
+          </Grid> */}
           <Grid sx={{ textAlign: "left" }} item xs={12} md={2}>
             Gas Used:
           </Grid>

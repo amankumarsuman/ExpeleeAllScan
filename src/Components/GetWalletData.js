@@ -5,7 +5,7 @@ import axios from "axios";
 async function getWalletData(address, network) {
   let apiUrl, apiKey;
   switch (network) {
-    case "ethereum":
+    case "Ethereum":
       apiUrl = "https://api.etherscan.io";
       apiKey = "N98ZV19DWMZZ2HPA5J4NS7BVK1GRQ1QGSR";
       break;
@@ -30,12 +30,12 @@ async function getWalletData(address, network) {
   );
   console.log(txListResponse, "txListResponse");
   let balanceResponse;
-  if (txListResponse?.result?.length > 0) {
-    balanceResponse = await axios.get(
-      `${apiUrl}/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
-    );
-    console.log(balanceResponse, "balanceResponse");
-  }
+  // if (txListResponse?.result?.length > 0) {
+  balanceResponse = await axios.get(
+    `${apiUrl}/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
+  );
+  console.log(balanceResponse, "balanceResponse");
+  // }
 
   //   const balanceInEther = formatUnits(balanceResponse.data.result, 18);
   const balanceInEther = balanceResponse?.data?.result
