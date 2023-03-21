@@ -36,7 +36,7 @@ export default function BasicCard(props) {
             </span>
           </Typography>
           <Typography component="div">
-            {props?.network === "ethereum"
+            {props?.network === "Ethereum"
               ? "ETH BALANCE"
               : props?.network === "polygon"
               ? "MATIC BALANCE"
