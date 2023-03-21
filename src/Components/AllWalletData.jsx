@@ -13,7 +13,7 @@ import { getNetworkFromAddress } from "./getNetworkFromAddress";
 // assuming the getWalletData function is exported from a separate file
 import { css } from "@emotion/react";
 import PulseLoader from "react-spinners/PulseLoader";
-import { Grid, TextField } from "@mui/material";
+import { CircularProgress, Grid, TextField } from "@mui/material";
 import MediaCard from "./emptyCard/EmptyCard";
 import "./mainBodystyle.css";
 import Body from "./body/Body";
@@ -32,7 +32,7 @@ function AllWalletDetails() {
   const [isWalletAddr, setIsWalletAddr] = useState(true);
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [inProgress, setInProgress] = useState(false);
   function Loader() {
     if (walletData?.allTransaction?.length > 0) {
       setLoading(true);
@@ -63,7 +63,8 @@ function AllWalletDetails() {
   const handleGetDetails = async () => {
     try {
       if (address?.length > 42) {
-        console.log("called1");
+        setInProgress(true);
+        // console.log("called1");
         const networkName = await getNetworkFromAddress(address);
         console.log(networkName, "network");
         // setLoading(true);
@@ -77,23 +78,24 @@ function AllWalletDetails() {
         const formattedDetails = formatTransactionDetails(TransactionResult);
         setDetails(formattedDetails);
         setLoading(false);
-
+        setInProgress(false);
         // setLoading(false);
       } else if (address?.length < 50) {
         // setLoading(true);
         //
+        setInProgress(true);
         const networkName = await getNetworkFromAddress(address);
         console.log(networkName, "network");
         setTransactionAddress(false);
         setIsWalletAddr(true);
-        console.log("called2");
+        // console.log("called2");
         const data = await getWalletData(address, networkName);
-        console.log(
-          data?.allTransaction?.length,
-          data?.allTransaction,
-          data,
-          "transaction"
-        );
+        // console.log(
+        //   data?.allTransaction?.length,
+        //   data?.allTransaction,
+        //   data,
+        //   "transaction"
+        // );
         if (
           data?.allTransaction?.length > 0 &&
           data?.allTransaction !== "Error! Invalid address format"
@@ -101,6 +103,7 @@ function AllWalletDetails() {
           setWalletData(data);
           setAllTransaction(data?.allTransaction);
           setLoading(false);
+          setInProgress(false);
         }
         // setIsWalletAddr(true)
         // setLoading(false);
@@ -127,7 +130,7 @@ function AllWalletDetails() {
     // Loader()
   }, [address]);
 
-  console.log(walletData, network, "details");
+  console.log(inProgress, "inProgress");
   return (
     <div>
       {/* <label>
@@ -176,6 +179,8 @@ function AllWalletDetails() {
 
       {loading ? (
         <Body />
+      ) : inProgress ? (
+        <CircularProgress color="inherit" />
       ) : walletData && isWalletAddr && allTransaction.length > 0 ? (
         <>
           {/* <div
