@@ -10,6 +10,7 @@ function App() {
     <div className="App">
       {/* <WalletDataWithTime /> */}
       <ResponsiveAppBar />
+      {/* <hr /> */}
       {/* <Body /> */}
       <AllWalletDetails />
     </div>

@@ -132,7 +132,7 @@ function AllWalletDetails() {
 
   console.log(inProgress, "inProgress");
   return (
-    <div>
+    <div style={{ marginTop: "0.3em" }}>
       {/* <label>
         Wallet address:{" "}
         <input type="text" value={address} onChange={handleAddressChange} />
