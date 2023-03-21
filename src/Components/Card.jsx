@@ -51,7 +51,7 @@ export default function BasicCard(props) {
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {props?.balance ? (
               `${props.balanceInEther} ${
-                props?.network === "ethereum"
+                props?.network === "Ethereum"
                   ? "ETH"
                   : props?.network === "polygon"
                   ? "MATIC"
@@ -83,7 +83,7 @@ export default function BasicCard(props) {
             {/* well meaning and kindly.
           <br />
           {'"a benevolent smile"'} */}
-            {props?.balance && props?.network === "ethereum"
+            {props?.balance && props?.network === "Ethereum"
               ? "ETH VALUE"
               : props?.network === "polygon"
               ? "MATIC VALUE"
