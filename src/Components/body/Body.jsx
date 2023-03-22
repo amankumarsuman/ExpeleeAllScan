@@ -6,6 +6,7 @@ import { FcGlobe } from "react-icons/fc";
 import ChartComponent from "../charts/ChartComponents";
 import GasAndEthPrice from "./GasTracker";
 import { useSelector } from "react-redux";
+import GasAndEthPriceOfAllNetwork from "./AllNetworkPrice";
 function Body() {
   const ethereumPrice=useSelector((state)=>state?.allscan?.ethereumPrice)
 
@@ -97,6 +98,10 @@ function Body() {
 <div style={{width:"80%",margin:"auto"}}>
 
     <GasAndEthPrice/>
+</div>
+<div style={{width:"80%",margin:"auto"}}>
+
+    <GasAndEthPriceOfAllNetwork/>
 </div>
     </>
   );

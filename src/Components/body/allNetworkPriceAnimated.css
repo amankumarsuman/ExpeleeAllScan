@@ -1,0 +1,190 @@
+/* .gas-and-eth-price {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #242424;
+    background-image: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+      ),
+      linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+      );
+    background-size: 100px 100px;
+    background-position: 0 0, 50px 50px;
+  } */
+  
+  .gas-and-eth-price {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* background-color: #242424; */
+    position: relative;
+}
+
+.gas-and-eth-price:before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+    ),
+    linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+    ),
+    linear-gradient(
+        90deg,
+        #C6FFDD, #FBD786, #f7797d
+    );
+    background-size: 50px 50px, 50px 50px, cover;
+    background-position: 0 0, 50px 50px, center;
+    z-index: -1;
+    animation: animateGradient 15s linear infinite;
+}
+
+@keyframes animateGradient {
+    0% {
+        background-position: 0 0, 50px 50px, center;
+    }
+    100% {
+        background-position: 100% 100%, calc(50px + 100%) calc(50px + 100%), center;
+    }
+}
+
+
+  .gas-price,
+  .eth-price,
+  .bsc-price,
+  .arbitrum-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    background-color: #f5f5f5;
+    width: 250px;
+    height: 250px;
+    border-radius: 20px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* .gas-price:hover,
+  .eth-price:hover,
+  .bsc-price:hover,
+  .arbitrum-price:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  } */
+  
+  .gas-price:hover,
+.eth-price:hover,
+.bsc-price:hover,
+.arbitrum-price:hover {
+  transform: translateY(-5px) perspective(500px) rotateX(10deg);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+  .gas-price-header,
+  .eth-price-header,
+  .bsc-price-header,
+  .arbitrum-price-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    width: 100%;
+    background-color: #4a4a4a;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px;
+  }
+  
+  .gas-price-body,
+  .eth-price-body,
+  .bsc-price-body,
+  .arbitrum-price-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: calc(100% - 70px);
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .price {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #555;
+  }
+  
+  .positive {
+    color: green;
+  }
+  
+  .negative {
+    color: red;
+  }
+  
+  .gas-icon,
+  .eth-icon,
+  .bsc-icon,
+  .arbitrum-icon {
+    font-size: 48px;
+    margin-right: 10px;
+  }
+  
+  @keyframes bgAnimation {
+    from {
+      background-position: 0 0, 50px 50px;
+    }
+    to {
+      background-position: 100px 100px, 150px 150px;
+    }
+  }
+  @keyframes bgAnimation {
+    0% {
+      transform: rotate3d(1, 0, 0, 0deg) rotate3d(0, 1, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    }
+    100% {
+      transform: rotate3d(1, 0, 0, 360deg) rotate3d(0, 1, 0, 360deg) rotate3d(0, 0, 1, 360deg);
+    }
+  }
+  

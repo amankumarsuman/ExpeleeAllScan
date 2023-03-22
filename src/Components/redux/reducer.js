@@ -9,6 +9,12 @@ const init = {
   totalPublisher: 0,
   walletData: {},
   ethereumPrice:1000,
+  // networkPrice:{
+    
+    maticPrice:0,
+    arbitrumPrice:0,
+    binancePrice:0,
+  // }
 };
 
 export const allscanReducer = (state = init, action) => {
@@ -49,6 +55,24 @@ export const allscanReducer = (state = init, action) => {
       return {
         ...state,
         ethereumPrice: payload,
+        
+      };
+    case types.GET_MATIC_PRICE:
+      return {
+        ...state,
+        maticPrice: payload,
+        
+      };
+    case types.GET_BINANCE_PRICE:
+      return {
+        ...state,
+        binancePrice: payload,
+        
+      };
+    case types.GET_ARBITRUM_PRICE:
+      return {
+        ...state,
+        arbitrumPrice: payload,
         
       };
     default:

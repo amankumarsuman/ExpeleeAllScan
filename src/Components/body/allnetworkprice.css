@@ -1,0 +1,61 @@
+.gas-and-eth-price {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  
+  .gas-price, .eth-price, .bsc-price, .arbitrum-price {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .gas-price:hover, .eth-price:hover, .bsc-price:hover, .arbitrum-price:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .gas-price-header, .eth-price-header, .bsc-price-header, .arbitrum-price-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  .gas-icon, .eth-icon, .bsc-icon, .arbitrum-icon {
+    font-size: 2rem;
+    margin-right: 0.5rem;
+  }
+  
+  .price {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #2e2e2e;
+  }
+  
+  .percentage {
+    font-size: 1.25rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+  
+  .positive {
+    color: #35c759;
+  }
+  
+  .negative {
+    color: #ff3b30;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .gas-price, .eth-price, .bsc-price, .arbitrum-price {
+      height: auto;
+      margin-bottom: 2rem;
+    }
+  }
+  

@@ -125,3 +125,21 @@ export const getEthereumPrice = (payload) => {
     payload: payload,
   };
 };
+export const getBinancePrice = (payload) => {
+  return {
+    type: types.GET_BINANCE_PRICE,
+    payload: payload,
+  };
+};
+export const getMaticPrice = (payload) => {
+  return {
+    type: types.GET_MATIC_PRICE,
+    payload: payload,
+  };
+};
+export const getArbitrumPrice = (payload) => {
+  return {
+    type: types.GET_ARBITRUM_PRICE,
+    payload: payload,
+  };
+};
